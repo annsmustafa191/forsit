@@ -1,10 +1,23 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/revenue-analysis">Revenue Analysis</router-link>| |
+    <router-link to="/inventory-management">Inventory Management</router-link> |
+    |
+    <router-link to="/add-product">Add Product</router-link>
   </nav>
   <router-view />
 </template>
+<script>
+import { useStore } from "vuex";
+export default {
+  beforeCreate() {
+    // Get our store
+    const store = useStore();
+    // use store.commit to run any mutation. Below we are running the loadStore mutation
+    store.commit("loadStore");
+  },
+};
+</script>
 
 <style>
 #app {
