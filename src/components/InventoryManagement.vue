@@ -52,7 +52,6 @@
 import { Vue } from "vue-class-component";
 import { onMounted, computed } from "vue";
 import store from "@/store";
-import data from "../data/sales-data";
 
 export default class InventoryManagement extends Vue {
   allProducts = [];
@@ -115,7 +114,7 @@ export default class InventoryManagement extends Vue {
     { key: "edit", label: "" },
   ];
 
-  items = [...data];
+  items = [...store.getters.products];
 
   pagedItems() {
     const start = (this.currentPage - 1) * this.perPage;

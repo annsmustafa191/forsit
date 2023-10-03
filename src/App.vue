@@ -11,9 +11,7 @@
 import { useStore } from "vuex";
 export default {
   beforeCreate() {
-    // Get our store
     const store = useStore();
-    // use store.commit to run any mutation. Below we are running the loadStore mutation
     store.commit("loadStore");
   },
 };

@@ -55,11 +55,12 @@ export default class AddProductForm extends Vue {
 
   addProduct() {
     const newProduct = {
-      name: this.productName,
+      title: this.productName,
       description: this.description,
       price: this.price,
-      initialStock: this.initialStock,
-      image: this.productImage,
+      stock: this.initialStock,
+      images: [this.productImage],
+      thumbnail: this.imagePreview,
     };
 
     this.$emit("add-product", newProduct);
