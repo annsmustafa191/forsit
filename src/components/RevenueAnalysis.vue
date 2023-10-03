@@ -72,7 +72,6 @@ import { onMounted, computed } from "vue";
 import store from "@/store";
 
 export default class RevenueAnalysis extends Vue {
-  allProducts = [];
   perPage = 10;
   currentPage = 1;
   setup() {
@@ -105,7 +104,7 @@ export default class RevenueAnalysis extends Vue {
 
   items = [...store.getters.products];
 
-  pagedItems() {
+  get pagedItems() {
     const start = (this.currentPage - 1) * this.perPage;
     const end = start + this.perPage;
     return this.items.slice(start, end);
