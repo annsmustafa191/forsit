@@ -63,12 +63,13 @@ export default class InventoryManagement extends Vue {
 
   setup() {
     onMounted(() => {
-      this.allProducts = store.getters.products;
-      this.allProducts = this.allProducts.map((allProducts) => ({
-        ...allProducts,
+      console.log("in mounted");
+      this.items = store.getters.products;
+      this.items = this.items.map((items) => ({
+        ...items,
         isEdit: false,
       }));
-      console.log(this.allProducts);
+      console.log(this.items);
     });
 
     const newItems = computed(() => {
@@ -80,8 +81,6 @@ export default class InventoryManagement extends Vue {
 
     const filteredProducts = computed(() => {
       let filteredItems = [...this.items];
-
-      // Filter by search query
       if (this.searchQuery) {
         filteredItems = filteredItems.filter((item) =>
           item.title.toLowerCase().includes(this.searchQuery.toLowerCase())

@@ -79,12 +79,12 @@ export default class RevenueAnalysis extends Vue {
   setup() {
     onMounted(() => {
       console.log("in mounted");
-      this.allProducts = store.getters.products;
-      this.allProducts = this.allProducts.map((allProducts) => ({
-        ...allProducts,
+      this.items = store.getters.products;
+      this.items = this.items.map((items) => ({
+        ...items,
         isEdit: false,
       }));
-      console.log(this.allProducts);
+      console.log(this.items);
     });
 
     // Define the computed property for newItems correctly
@@ -92,12 +92,8 @@ export default class RevenueAnalysis extends Vue {
       console.log("in computed");
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
-      return this.items.slice(start, end); // Use allProducts here
+      return this.items.slice(start, end);
     });
-
-    return {
-      newItems, // Return the computed property
-    };
   }
 
   fields = [
