@@ -86,9 +86,7 @@ export default class RevenueAnalysis extends Vue {
       console.log(this.items);
     });
 
-    // Define the computed property for newItems correctly
     const newItems = computed(() => {
-      console.log("in computed");
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
       return this.items.slice(start, end);
@@ -114,10 +112,50 @@ export default class RevenueAnalysis extends Vue {
   }
 
   editRowHandler(data) {
-    console.log(data);
+    const updatedProduct = {
+      title: data.item.title,
+      description: data.item.description,
+      stock: data.item.stock,
+      brand: data.item.brand,
+      category: data.item.category,
+    };
+    store.commit("updateProduct", updatedProduct);
     this.items[data.index].isEdit = !this.items[data.index].isEdit;
   }
 }
 </script>
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped></style>
+<style scoped>
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
+}
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.table th.sortable.active {
+  background-color: #f8f9fa;
+}
+
+.b-form-input {
+  margin-bottom: 10px;
+}
+
+.b-pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+}
+</style>

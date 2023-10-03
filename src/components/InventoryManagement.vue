@@ -6,7 +6,7 @@
       placeholder="Search..."
     ></b-form-input>
     <b-table
-      :items="items"
+      :items="filteredProducts"
       :fields="fields"
       :per-page="perPage"
       :current-page="currentPage"
@@ -37,10 +37,27 @@
           <span v-else>Done</span>
         </b-button>
       </template>
+      <template #thead-top-row>
+        <b-th
+          v-for="field in fields"
+          :key="field.key"
+          :is-sortable="field.sortable"
+          @click="sortTable(field.key)"
+        >
+          {{ field.label }}
+          <span
+            v-if="sortBy === field.key"
+            :class="{
+              'sort-asc': !sortBy.endsWith('_desc'),
+              'sort-desc': sortBy.endsWith('_desc'),
+            }"
+          ></span>
+        </b-th>
+      </template>
     </b-table>
     <b-pagination
       v-model="currentPage"
-      :total-rows="items.length"
+      :total-rows="filteredProducts.length"
       :per-page="perPage"
       aria-controls="itemList"
       align="center"
@@ -116,46 +133,83 @@ export default class InventoryManagement extends Vue {
 
   items = [...store.getters.products];
 
+  get filteredProducts() {
+    let filteredItems = [...this.items];
+    if (this.searchQuery) {
+      filteredItems = filteredItems.filter((item) =>
+        item.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+
+    // Sorting logic
+    if (this.sortBy) {
+      filteredItems.sort((a, b) => {
+        const fieldA = a[this.sortBy];
+        const fieldB = b[this.sortBy];
+        return fieldA.localeCompare(fieldB);
+      });
+    }
+
+    return filteredItems;
+  }
+
   pagedItems() {
     const start = (this.currentPage - 1) * this.perPage;
     const end = start + this.perPage;
     return this.items.slice(start, end);
   }
 
-  editRowHandler(data) {
-    console.log(data);
-    this.items[data.index].isEdit = !this.items[data.index].isEdit;
+  sortTable(key) {
+    if (this.sortBy === key) {
+      // Toggle sorting order if the same column is clicked again
+      this.sortBy = this.sortBy.endsWith("_desc") ? key : key + "_desc";
+    } else {
+      this.sortBy = key;
+    }
   }
 
-  // filteredProducts() {
-  //   // Implement filtering and sorting logic based on sortOption and searchQuery
-  //   // Return a filtered and sorted array of products
-  // }
-  // lowInventoryProducts() {
-  //   // Implement logic to find and filter products with low inventory
-  //   // Return an array of products with low inventory
-  // }
-
-  updateInventory(product) {
-    // Implement inventory update logic here
+  editRowHandler(data) {
+    const updatedProduct = {
+      stock: data.item.stock,
+    };
+    store.commit("updateProduct", updatedProduct);
+    this.items[data.index].isEdit = !this.items[data.index].isEdit;
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h3 {
-  margin: 40px 0 0;
+.table {
+  width: 100%;
+  margin-bottom: 1rem;
+  background-color: transparent;
+  border-collapse: collapse;
 }
-ul {
-  list-style-type: none;
-  padding: 0;
+
+.table th,
+.table td {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
 }
-li {
-  display: inline-block;
-  margin: 0 10px;
+
+.table thead th {
+  vertical-align: bottom;
+  border-bottom: 2px solid #dee2e6;
 }
-a {
-  color: #42b983;
+
+.table th.sortable.active {
+  background-color: #f8f9fa;
+}
+
+.b-form-input {
+  margin-bottom: 10px;
+}
+
+.b-pagination {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
 }
 </style>

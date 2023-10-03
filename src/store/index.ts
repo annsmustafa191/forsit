@@ -1,5 +1,5 @@
 import { createStore } from "vuex";
-import { data } from "../data/sales-data";
+import Vue from "vue";
 
 export default createStore({
   state: {
@@ -13,6 +13,14 @@ export default createStore({
   mutations: {
     addProduct(state, newProduct) {
       state.products.push(newProduct);
+    },
+    updateProduct(state, updatedProduct) {
+      const productIndex = state.products.findIndex(
+        (product) => product.id === updatedProduct.id
+      );
+      if (productIndex !== -1) {
+        state.products[productIndex] = updatedProduct;
+      }
     },
     loadStore() {
       if (localStorage.getItem("store")) {
