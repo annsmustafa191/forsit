@@ -3,7 +3,7 @@ import { data } from "../data/sales-data";
 
 export default createStore({
   state: {
-    products: data,
+    products: [data],
   },
   getters: {
     products(state) {

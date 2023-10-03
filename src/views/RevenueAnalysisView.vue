@@ -1,6 +1,5 @@
 <template>
   <RevenueAnalysis></RevenueAnalysis>
-  <ChartAnalysis></ChartAnalysis>
 </template>
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";

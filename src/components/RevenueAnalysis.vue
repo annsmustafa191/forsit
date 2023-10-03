@@ -87,22 +87,26 @@ export default class RevenueAnalysis extends Vue {
       console.log(this.allProducts);
     });
 
+    // Define the computed property for newItems correctly
     const newItems = computed(() => {
       console.log("in computed");
-
       const start = (this.currentPage - 1) * this.perPage;
       const end = start + this.perPage;
-      return this.items.slice(start, end);
+      return this.items.slice(start, end); // Use allProducts here
     });
+
+    return {
+      newItems, // Return the computed property
+    };
   }
 
   fields = [
-    { key: "id", label: "Id" },
-    { key: "title", label: "Title" },
-    { key: "description", label: "Description" },
-    { key: "stock", label: "Stock" },
-    { key: "brand", label: "Brand" },
-    { key: "category", label: "Category" },
+    { key: "id", label: "Id", sortable: false },
+    { key: "title", label: "Title", sortable: false },
+    { key: "description", label: "Description", sortable: false },
+    { key: "stock", label: "Stock", sortable: false },
+    { key: "brand", label: "Brand", sortable: false },
+    { key: "category", label: "Category", sortable: false },
     { key: "edit", label: "" },
   ];
 
