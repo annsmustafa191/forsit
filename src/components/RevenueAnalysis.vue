@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <b-table :items="items" :fields="fields">
+    <b-table
+      :items="items"
+      :fields="fields"
+      :per-page="perPage"
+      :current-page="currentPage"
+    >
       <template #cell(id)="data">
         <span>{{ data.value }}</span>
       </template>
@@ -51,22 +56,29 @@
         </b-button>
       </template>
     </b-table>
-    <pre>
-      {{ items }}
-    </pre>
+    <b-pagination
+      v-model="currentPage"
+      :total-rows="items.length"
+      :per-page="perPage"
+      aria-controls="itemList"
+      align="center"
+    ></b-pagination>
   </div>
 </template>
 
 <script lang="ts">
-import { Options, Vue } from "vue-class-component";
-import { onMounted } from "vue";
+import { Vue } from "vue-class-component";
+import { onMounted, computed } from "vue";
 import store from "@/store";
+import data from "../data/sales-data";
 
 export default class RevenueAnalysis extends Vue {
   allProducts = [];
-
+  perPage = 10;
+  currentPage = 1;
   setup() {
     onMounted(() => {
+      console.log("in mounted");
       this.allProducts = store.getters.products;
       this.allProducts = this.allProducts.map((allProducts) => ({
         ...allProducts,
@@ -74,7 +86,16 @@ export default class RevenueAnalysis extends Vue {
       }));
       console.log(this.allProducts);
     });
+
+    const newItems = computed(() => {
+      console.log("in computed");
+
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.items.slice(start, end);
+    });
   }
+
   fields = [
     { key: "id", label: "Id" },
     { key: "title", label: "Title" },
@@ -85,7 +106,13 @@ export default class RevenueAnalysis extends Vue {
     { key: "edit", label: "" },
   ];
 
-  items = [...this.allProducts];
+  items = [...data];
+
+  pagedItems() {
+    const start = (this.currentPage - 1) * this.perPage;
+    const end = start + this.perPage;
+    return this.items.slice(start, end);
+  }
 
   editRowHandler(data) {
     console.log(data);

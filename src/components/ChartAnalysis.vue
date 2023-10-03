@@ -6,7 +6,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import { Bar } from "vue-chartjs";
+import { Line } from "vue-chartjs";
 import {
   Chart as ChartJS,
   Title,
@@ -27,14 +27,21 @@ ChartJS.register(
 );
 
 export default class ChartAnalysis extends Vue {
-  name: "BarChart";
-  components: { Bar };
-  chartData = {
-    labels: ["January", "February", "March"],
-    datasets: [{ data: [40, 20, 12] }],
+  name: "LineChart";
+  components = { Line };
+  chartData: {
+    labels: ["January", "February", "March", "April", "May", "June", "July"];
+    datasets: [
+      {
+        label: "Data One";
+        backgroundColor: "#f87979";
+        data: [40, 39, 10, 40, 39, 80, 40];
+      }
+    ];
   };
-  chartOptions = {
-    responsive: true,
+
+  chartOptions: {
+    responsive: true;
   };
 }
 </script>
